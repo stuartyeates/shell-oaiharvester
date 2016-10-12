@@ -135,7 +135,10 @@ REPOSITORY_DELETE_CMD=$(getRepositoryConfig "repository_deletecmd" ${REPOSITORY}
 
 # checking required values
 [ -z ${BASEURL} ] && die "No baseurl found for repository: ${REPOSITORY}"
-[ -z ${PREFIX} ] && die "No prefix found for repository: ${REPOSITORY}"
+# use protocol-default oai_dc prefix 
+if [ -z ${PREFIX} ]; then
+    PREFIX="oai_dc"
+fi
 
 # making sure we have a good logtype
 LOGTYPE=${LOGTYPE:-"combined"}
