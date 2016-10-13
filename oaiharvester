@@ -86,7 +86,7 @@ while true ; do
 	case "$1" in
 		--config|-c) shift; CONFIGFILE=$1 ;;
 		--help|-h) usage; exit 0 ;;
-		--repository|-r) shift; REPOSITORY=$1 ;;
+		--repository|-r) shift; REPOSITORIES=$1 ;;
 		--no-records|-n) VERB="ListIdentifiers" ;;
 		--test|-t) TEST="true" ;;
 		--version|-v) echo "${VERSION}"; exit 0 ;;
@@ -104,11 +104,6 @@ if [ ! -f "${INSTALLDIR}/functions.sh" ]; then
 fi
 source "${INSTALLDIR}/functions.sh"
 
-# Check repository id
-if [ -z ${REPOSITORY} ]; then
-	die "No repository id provided"
-fi
-
 # Check config file
 if [ -z ${CONFIGFILE} ] || [ ! -f ${CONFIGFILE} ]; then
 	die "Config file not found: ${CONFIGFILE}"
@@ -122,6 +117,15 @@ LOGTYPE=$(getGenericConfig "logtype")
 CURL_OPTS=$(getGenericConfig "curlopts")
 UPDATE_CMD=$(getGenericConfig "updatecmd")
 DELETE_CMD=$(getGenericConfig "deletecmd")
+
+
+# Check repository id
+if [ -z ${REPOSITORIRIES} ]; then
+	REPOSITORIES=$(getGenericConfig "listrepos")
+fi
+
+for REPOSITORY in ${REPOSITORIES}; do
+
 BASEURL=$(getRepositoryConfig "baseurl" ${REPOSITORY})
 PREFIX=$(getRepositoryConfig "metadataprefix" ${REPOSITORY})
 SET=$(getRepositoryConfig "set" ${REPOSITORY})
@@ -246,5 +250,7 @@ done
 
 # When finished, save startharvest timestamp
 echo ${startharvestts} > ${repository_timestamp}
+
+done
 
 cleanup 0

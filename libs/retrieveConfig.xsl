@@ -31,6 +31,13 @@
 			<xsl:when test="$data='deletecmd'">
   				<xsl:value-of select="/cfg:config/cfg:deletecmd"/>
 			</xsl:when>
+			<xsl:when test="$data='listrepos'">
+			  <xsl:for-each select="/cfg:config/cfg:repository/@id">
+  			    <xsl:value-of select="."/>
+			    <xsl:text>
+</xsl:text>
+			  </xsl:for-each>
+			</xsl:when>
 			<!-- Repository options -->
 			<xsl:when test="$data='baseurl'">
   				<xsl:value-of select="/cfg:config/cfg:repository[@id=$repository]/cfg:baseurl"/>
